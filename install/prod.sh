@@ -1,7 +1,7 @@
 #/!/bin/bash
 
 # install apache
-yum install nano wget httpd -y
+yum install nano wget git httpd -y
 
 # get some repos
 rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
@@ -9,24 +9,24 @@ wget http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
 rpm -Uvh remi-release-7.rpm
 
 # get latest mysql
-yum install -y http://dev.mysql.com/get/mysql57-community-release-el7-8.noarch.rpm 
-yum install -y mysql-community-server
-systemctl enable mysqld.service
-/bin/systemctl start mysqld.service
-yum update -y
+#yum install -y http://dev.mysql.com/get/mysql57-community-release-el7-8.noarch.rpm 
+#yum install -y mysql-community-server
+#systemctl enable mysqld.service
+#/bin/systemctl start mysqld.service
+#yum update -y
 
 yum install -y --enablerepo=remi-php70 php php-apcu php-fpm php-opcache php-cli php-common php-gd php-mbstring php-mcrypt php-pdo php-xml php-mysqlnd
 
 # varnish
-rpm --nosignature -i https://repo.varnish-cache.org/redhat/varnish-4.0.el7.rpm
-yum install -y varnish
+#rpm --nosignature -i https://repo.varnish-cache.org/redhat/varnish-4.0.el7.rpm
+#yum install -y varnish
 
 # VARNISH
-cat varnish/default.vcl > /etc/varnish/default.vcl
-cat varnish/varnish.params > /etc/varnish/varnish.params
+# cat varnish/default.vcl > /etc/varnish/default.vcl
+# cat varnish/varnish.params > /etc/varnish/varnish.params
 
 # Varnish can listen
-sed -i 's/Listen 80/Listen 8080/g' /etc/httpd/conf/httpd.conf
+# sed -i 's/Listen 80/Listen 8080/g' /etc/httpd/conf/httpd.conf
 
 # PHP
 # The first pool
@@ -71,28 +71,28 @@ echo IncludeOptional conf.performance.d/*.conf >> /etc/httpd/conf/httpd.conf
 echo IncludeOptional conf.security.d/*.conf >> /etc/httpd/conf/httpd.conf
 
 # fix date timezone errors
-sed -i 's#;date.timezone =#date.timezone = "America/New_York"#g' /etc/php.ini
+sed -i 's#;date.timezone =#date.timezone = "Asia/Kolkata"#g' /etc/php.ini
 
 # FIREWALL
-systemctl start firewalld.service
-systemctl enable firewalld.service
-firewall-cmd --permanent --add-port=80/tcp
-firewall-cmd --permanent --add-port=8080/tcp
-firewall-cmd --permanent --add-port=22/tcp
-systemctl restart firewalld.service
+# systemctl start firewalld.service
+# systemctl enable firewalld.service
+# firewall-cmd --permanent --add-port=80/tcp
+# firewall-cmd --permanent --add-port=8080/tcp
+# firewall-cmd --permanent --add-port=22/tcp
+# systemctl restart firewalld.service
 
 # Make sue services stay on after reboot
 
 systemctl enable httpd.service
-systemctl enable mysqld.service
+# systemctl enable mysqld.service
 systemctl enable php-fpm.service
-systemctl enable varnish.service
+# systemctl enable varnish.service
 
 # Start all the services we use.
 systemctl start php-fpm.service
-systemctl start  mysqld.service
+# systemctl start  mysqld.service
 systemctl start httpd.service
-systemctl start varnish.service
+# systemctl start varnish.service
 
 # Install Drush globally.
 curl -sS https://getcomposer.org/installer | php
