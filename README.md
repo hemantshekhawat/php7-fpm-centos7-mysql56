@@ -7,5 +7,5 @@ git clone https://github.com/hemantshekhawat/php7-fpm-centos7-mysql56.git; cd ph
 
 ## PROD
 ```bash
-sudo yes | yum -y install git && git clone https://github.com/hemantshekhawat/php7-fpm-centos7-mysql56.git && cd php7-fpm-centos7-mysql56 && chmod 700 install/prod.sh && install/prod.sh
+sudo yes |sudo yum -y install git && git clone https://github.com/hemantshekhawat/php7-fpm-centos7-mysql56.git && cd php7-fpm-centos7-mysql56 && sudo chmod 700 install/prod.sh && sh install/prod.sh
 ```
